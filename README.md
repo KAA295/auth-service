@@ -1,7 +1,7 @@
 **Запуск**
 
-`docker-compose up -d` - запуск сервиса
+`make build_launch` - запуск сервиса
 
-`docker-compose run tests` - запуск тестов
+`make build_launch_test` - запуск сервиса с тестами
 
 http://localhost:8000/docs/ - swagger документация
