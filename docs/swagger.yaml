@@ -1,0 +1,105 @@
+basePath: /
+definitions:
+  types.ErrorResponse:
+    properties:
+      message:
+        example: internal error
+        type: string
+    type: object
+  types.GenerateTokensRequest:
+    properties:
+      guid:
+        example: e8207e59-127e-4557-bd66-6c43c427c109
+        type: string
+    type: object
+  types.RefreshTokensRequest:
+    properties:
+      guid:
+        example: e8207e59-127e-4557-bd66-6c43c427c109
+        type: string
+      refresh_token:
+        example: refresh_token
+        type: string
+    type: object
+  types.TokensResponse:
+    properties:
+      access_token:
+        example: access_token
+        type: string
+      refresh_token:
+        example: refresh_token
+        type: string
+    type: object
+host: localhost:8000
+info:
+  contact: {}
+  description: Test task for medods.
+  title: Auth Service
+  version: "1.0"
+paths:
+  /generate_tokens:
+    post:
+      description: Generate access_token and refresh_token
+      parameters:
+      - description: guid
+        in: body
+        name: json-body
+        required: true
+        schema:
+          $ref: '#/definitions/types.GenerateTokensRequest'
+      responses:
+        "200":
+          description: Token
+          schema:
+            $ref: '#/definitions/types.TokensResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/types.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/types.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/types.ErrorResponse'
+      summary: Generate Tokens
+  /refresh_tokens:
+    post:
+      description: Refresh access_token and refresh_token
+      parameters:
+      - description: guid and refresh_token
+        in: body
+        name: json-body
+        required: true
+        schema:
+          $ref: '#/definitions/types.RefreshTokensRequest'
+      - description: access_token with Bearer
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: Token
+          schema:
+            $ref: '#/definitions/types.TokensResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/types.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/types.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/types.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/types.ErrorResponse'
+      summary: Refresh Tokens
+swagger: "2.0"

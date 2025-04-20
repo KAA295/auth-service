@@ -1,0 +1,35 @@
+services:
+  service:
+    build:
+      dockerfile: cmd/app/Dockerfile
+      context: ./
+    depends_on:
+      storage:
+        condition: service_healthy
+    ports:
+      - 8000:8000
+  storage:
+    healthcheck:
+      test: pg_isready -U postgres -d postgres
+    image: postgres:latest
+    container_name: auth_service_storage
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - 5432:5432
+  migrator:
+    build:
+      dockerfile: migrations/migrator/Dockerfile
+      context: ./
+    depends_on:
+      storage:
+        condition: service_healthy
+    entrypoint: ["sh", "-c", "sql-migrate up -config migrations/migrator/config/dbconfig.yml -env=\"docker\""]
+  tests:
+    build:
+      dockerfile: tests/Dockerfile
+      context: ./
+    profiles:
+      - tests

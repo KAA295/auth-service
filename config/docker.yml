@@ -1,0 +1,13 @@
+address: ":8000"           
+
+postgres:                  
+  host: storage            
+  port: 5432               
+  user: postgres           
+  password: password       
+  db_name: postgres        
+
+tokens:                      
+  secret: "secret" 
+  refreshExp: 80 #В днях           
+  accessExp: 1 #В днях             
